@@ -1,19 +1,5 @@
 # vue_3_vuex_ts
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+* Learning Project from https://www.youtube.com/watch?v=nFh7-HfODYY
+* Reference: 
+    - https://next.vuex.vuejs.org/guide/composition-api.html#accessing-state-and-getters

@@ -1,27 +1,37 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <h1 class="counter">
-      {{ counter }}
+    <h1 class="counter" :style="{ color: $store.state.counterColor }">
+      {{ $store.state.counter }}
     </h1>
+    <p>{{ $store.state.counter }} + 2 = {{ $store.getters.counterPlusTwo }}</p>
     <div class="actions">
-      <button @click="decrease">-</button>
-      <button @click="increase">+</button>
+      <button @click="$store.dispatch('decrease')">-</button>
+      <button @click="$store.dispatch('increase')">+</button>
+    </div>
+    <div class="changeColor">
+      <input type="text" v-model="counterColor" placeholder="Enter color code" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, computed } from 'vue';
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: 'Home',
   setup() {
-    const counter = ref(0);
-    const increase = () => counter.value++;
-    const decrease = () => counter.value--;
-    
-    return { counter, increase, decrease };
+    const store = useStore();
+    const counterColor = computed({
+      get() {
+        return store.state.counterColor;
+      },
+      set(val) {
+        store.dispatch('setColor', val);
+      }
+    });
+    return { counterColor };
   },
 });
 </script>
@@ -35,5 +45,11 @@ button {
   width: 50px;
   cursor: pointer;
   margin-right: 10px;
+}
+.changeColor {
+  margin-top: 2rem;
+}
+input[type="text"] {
+  font-size: 1rem;
 }
 </style>
