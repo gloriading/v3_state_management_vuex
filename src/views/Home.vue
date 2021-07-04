@@ -1,7 +1,11 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <Counter />
+    <Counter
+      :fontSize="72"
+      :fontColor="$store.state.counterColor"
+      :count="$store.state.counter"
+    />
     <CounterPlusTwo />
     <CounterActions />
     <CounterColor />

@@ -1,20 +1,44 @@
 <template>
-  <h1 class="counter" :style="{ color: $store.state.counterColor }">
-    {{ $store.state.counter }}
+  <h1 :style="counterStyle">
+    {{ count }}
   </h1>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed, reactive } from 'vue'
 
+interface Props {
+  fontSize: number;
+  fontColor: string;
+  count: number;
+}
 export default defineComponent({
   name: 'Counter',
-  setup() {
-    
+  props: {
+    fontSize: {
+      type: Number,
+      default: 72,
+    },
+    fontColor: {
+      type: String,
+      default: '#333',
+    },
+    count: {
+      type: Number,
+      default: 0,
+    },
+  },
+  setup(props: Props) {
+    props = reactive(props);
+
+    const counterStyle = computed(() => ({
+      'font-size': `${props.fontSize}px`,
+      'color': props.fontColor,
+      'font-family': 'Arial',
+    }));
+
+    return {
+      counterStyle
+    };
   },
 })
 </script>
-<style scoped>
-.counter {
-  font-size: 72px;
-}
-</style>
