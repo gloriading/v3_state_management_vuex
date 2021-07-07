@@ -5,7 +5,8 @@
 </template>
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useStore } from "vuex";
+import { useStore } from '../store/index';
+import { ActionTypes } from '../store/storeTypes';
 
 export default defineComponent({
   name: 'CounterColor',
@@ -16,7 +17,7 @@ export default defineComponent({
         return store.state.counterColor;
       },
       set(val) {
-        store.dispatch('setColor', val);
+        store.dispatch(ActionTypes.SET_COLOR, val);
       }
     });
     return { counterColor };

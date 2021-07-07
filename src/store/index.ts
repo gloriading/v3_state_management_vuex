@@ -1,41 +1,64 @@
-import { createStore } from 'vuex'
+import { InjectionKey } from 'vue';
 import axios from 'axios';
+import { Mutations, State, Actions, ActionTypes, MutationTypes, Getters } from './storeTypes';
+import { 
+  createStore,
+  Store,
+  useStore as baseUseStore,
+  MutationTree,
+  ActionTree,
+  GetterTree,
+} from 'vuex';
 
-const url = 'https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new';
+const state: State = {
+  counter: 1,
+  counterColor: 'blue',
+};
 
-export default createStore({
-  state: {
-    counter: 1,
-    counterColor: 'blue',
+const mutations: MutationTree<State> & Mutations = {
+  [MutationTypes.INCREASE](state, randomNumber) {
+    state.counter = state.counter + randomNumber;
   },
-  mutations: {
-    increase(state, randomNumber) {
-      state.counter = state.counter + randomNumber;
-    },
-    decrease(state) {
-      state.counter--;
-    },
-    setColor(state, color) {
-      state.counterColor = color;
-    },
+  [MutationTypes.DECREASE](state) {
+    state.counter--;
   },
-  actions: {
-    async increase({ commit }) {
-      const { data: randomNumber } = await axios.get(url); 
-      commit('increase', randomNumber);
-    },
-    decrease({ commit }) {
-      commit('decrease');
-    },
-    setColor({ commit }, newColor) {
-      commit('setColor', newColor);
-    },
+  [MutationTypes.SET_COLOR](state, color) {
+    state.counterColor = color;
   },
-  getters: {
-    counterPlusTwo(state) {
-      return state.counter + 2;
-    },
+};
+
+const actions: ActionTree<State, State> & Actions = {
+  async [ActionTypes.INCREASE]({ commit }) {
+    const url = 'https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new';
+    const { data: randomNumber } = await axios.get(url); 
+    commit(MutationTypes.INCREASE, randomNumber);
   },
+  [ActionTypes.DECREASE]({ commit }) {
+    commit(MutationTypes.DECREASE);
+  },
+  [ActionTypes.SET_COLOR]({ commit }, newColor) {
+    commit(MutationTypes.SET_COLOR, newColor);
+  }
+};
+
+const getters: GetterTree<State, State> & Getters = {
+  counterPlusTwo(state) {
+    return state.counter + 2;
+  },
+};
+
+export const store = createStore<State>({
+  state,
+  mutations,
+  actions,
+  getters,
   modules: {
   }
-})
+});
+
+export const key: InjectionKey<Store<State>> = Symbol();
+
+export function useStore() {
+  return baseUseStore(key)
+}
+
