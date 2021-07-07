@@ -1,16 +1,25 @@
 <template>
   <div class="actions">
-    <button @click="$store.dispatch('decrease')">-</button>
-    <button @click="$store.dispatch('increase')">+</button>
+    <button @click="handleDecrease">-</button>
+    <button @click="handleIncrease">+</button>
 </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
+import { useStore } from '../store/index';
+import { ActionTypes } from '../store/storeTypes';
 
 export default defineComponent({
   name: 'CounterActions',
   setup() {
+    const store = useStore();
+    const handleIncrease = () => store.dispatch(ActionTypes.INCREASE);
+    const handleDecrease = () => store.dispatch(ActionTypes.DECREASE);
     
+    return {
+      handleIncrease,
+      handleDecrease,
+    };
   },
 })
 </script>
